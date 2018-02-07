@@ -1,7 +1,7 @@
 #include "epd.h"
 
-Epd::Epd(SPI* spi, PinName cs_pin, PinName reset_pin, PinName dc_pin, PinName busy_pin):
- cs(cs_pin), reset(reset_pin), dc(dc_pin), busy(busy_pin)
+Epd::Epd(SPI& spi_object, PinName cs_pin, PinName reset_pin, PinName dc_pin, PinName busy_pin):
+ spi(spi_object), cs(cs_pin), display_reset(reset_pin), dc(dc_pin), busy(busy_pin)
 {
     this->spi = spi;
 }
@@ -9,13 +9,13 @@ Epd::Epd(SPI* spi, PinName cs_pin, PinName reset_pin, PinName dc_pin, PinName bu
 void Epd::sendCommand(unsigned char command)
 {
     dc = 0;
-    spi->transfer(command);
+    //spi->transfer(command);
 }
 
 void Epd::sendData(unsigned char data)
 {
     dc = 1;
-    spi->transfer(data);
+    //spi->transfer(data);
 }
 
 void Epd::waitUntilIdle()
@@ -27,8 +27,8 @@ void Epd::waitUntilIdle()
 
 void Epd::reset()
 {
-    reset = 0;
+    display_reset = 0;
     Thread::wait(200);
-    reset = 1;
+    display_reset = 1;
     Thread::wait(200);
 }

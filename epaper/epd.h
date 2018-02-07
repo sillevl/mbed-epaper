@@ -5,7 +5,7 @@
 class Epd
 {
     public: 
-    Epd(SPI* spi, PinName cs_pin, PinName reset_pin, PinName dc_pin, PinName busy_pin);
+    Epd(SPI& spi_object, PinName cs_pin, PinName reset_pin, PinName dc_pin, PinName busy_pin);
 
     protected:
     void sendCommand(unsigned char command);
@@ -16,7 +16,7 @@ class Epd
     
     DigitalOut dc;
     DigitalOut cs;
-    DigitalOut reset;
+    DigitalOut display_reset;
     DigitalIn busy;
-    SPI* spi;
+    SPI& spi;
 };
