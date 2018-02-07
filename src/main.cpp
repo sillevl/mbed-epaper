@@ -1,12 +1,12 @@
 #include "mbed.h"
  
-#include "edp.h"
+#include "epd.h"
 
 DigitalOut myled(LED1);
 SPI spi(D11, D12, D13); // mosi, miso, sclk
 // DigitalOut cs(D0);
 
-Edp edp(&spi, D2, D1, D0); // spi, cs, reset, dc
+Epd epd(&spi, D2, D1, D0); // spi, cs, reset, dc
  
 int main() {
 

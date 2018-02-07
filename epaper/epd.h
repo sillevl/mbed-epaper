@@ -2,10 +2,10 @@
 
 #include "mbed.h"
 
-class Edp
+class Epd
 {
     public: 
-    Edp(SPI* spi, PinName cs_pin, PinName reset_pin, PinName dc_pin, PinName busy_pin);
+    Epd(SPI* spi, PinName cs_pin, PinName reset_pin, PinName dc_pin, PinName busy_pin);
 
     protected:
     void sendCommand(unsigned char command);
