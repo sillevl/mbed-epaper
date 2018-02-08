@@ -15,6 +15,7 @@ int main() {
 
     epd.reset();
     epd.init();
+    epd.clearFrame();
     epd.demo();
 
     while(1) {

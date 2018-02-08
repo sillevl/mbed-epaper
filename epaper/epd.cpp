@@ -1,4 +1,5 @@
 #include "epd.h"
+#include "demo.c"
 
 Epd::Epd(SPI* spi, PinName cs_pin, PinName reset_pin, PinName dc_pin, PinName busy_pin):
   cs(cs_pin), display_reset(reset_pin), dc(dc_pin), busy(busy_pin)
@@ -99,7 +100,14 @@ void Epd::demo()
     sendCommand(DATA_START_TRANSMISSION_1);
     Thread::wait(2);
     for(int i = 0; i < this->width / 8 * this->height; i++) {
-        sendData(rand() % 255);
+        sendData(gImage_demo[i]);
+    }
+    Thread::wait(2);
+
+    sendCommand(DATA_START_TRANSMISSION_2);
+    Thread::wait(2);
+    for(int i = 0; i < this->width / 8 * this->height; i++) {
+        sendData(gImage_demo[i]);
     }
     Thread::wait(2);
 
