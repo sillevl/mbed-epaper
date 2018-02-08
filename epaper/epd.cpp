@@ -1,17 +1,18 @@
 #include "epd.h"
 
-Epd::Epd(SPI& spi_object, PinName cs_pin, PinName reset_pin, PinName dc_pin, PinName busy_pin):
- spi(spi_object), cs(cs_pin), display_reset(reset_pin), dc(dc_pin), busy(busy_pin)
+Epd::Epd(SPI* spi, PinName cs_pin, PinName reset_pin, PinName dc_pin, PinName busy_pin):
+  cs(cs_pin), display_reset(reset_pin), dc(dc_pin), busy(busy_pin)
 {
-    spi.format(8, 0);
-    spi.frequency(2000000);
+    this->spi = spi;
+    spi->format(8, 0);
+    spi->frequency(2000000);
+    width = 400;
+    height = 300;
+    init();
 }
 
-int Epd::init()
+void Epd::init()
 {
-    // if (IfInit() != 0) {
-    //     return -1;
-    // }
     reset();
     sendCommand(BOOSTER_SOFT_START);
     sendData(0x17);
@@ -21,7 +22,6 @@ int Epd::init()
     waitUntilIdle();
     sendCommand(PANEL_SETTING);
     sendData(0x0F);
-    return 0;
 }
 
 void Epd::sendCommand(unsigned char command)
@@ -53,4 +53,20 @@ void Epd::reset()
     Thread::wait(200);
     display_reset = 1;
     Thread::wait(200);
+}
+
+void Epd::clearFrame()
+{
+    sendCommand(DATA_START_TRANSMISSION_1);
+    Thread::wait(2);
+    for(int i = 0; i < width / 8 * height; i++) {
+        sendData(0xFF);
+    }
+    Thread::wait(2);
+    sendCommand(DATA_START_TRANSMISSION_2);
+    Thread::wait(2);
+    for(int i = 0; i < width / 8 * height; i++) {
+        sendData(0xFF);
+    }
+    Thread::wait(2);
 }
