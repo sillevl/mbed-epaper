@@ -52,12 +52,16 @@ class Epd
     public: 
     Epd(SPI* spi, PinName cs_pin, PinName reset_pin, PinName dc_pin, PinName busy_pin);
     void reset();
+    void init();
+    void sleep();
     void clearFrame();
+    void displayFrame();
+
+    void demo();
 
     protected:
     void sendCommand(unsigned char command);
     void sendData(unsigned char data);
-    void init();
     void waitUntilIdle();
     
     DigitalOut dc;
@@ -66,6 +70,8 @@ class Epd
     DigitalIn busy;
     SPI* spi;
 
-    unsigned int width;
-    unsigned int height;
+    // DigitalOut myled;
+
+    int width;
+    int height;
 };

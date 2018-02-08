@@ -28,7 +28,7 @@ void Epd::sendCommand(unsigned char command)
 {
     dc = 0;
     cs = 0;
-    //spi->transfer(command);
+    spi->write(command);
     cs = 1;
 }
 
@@ -36,7 +36,7 @@ void Epd::sendData(unsigned char data)
 {
     dc = 1;
     cs = 0;
-    //spi->transfer(data);
+    spi->write(data);
     cs = 1;
 }
 
@@ -69,4 +69,39 @@ void Epd::clearFrame()
         sendData(0xFF);
     }
     Thread::wait(2);
+}
+
+/**
+ * @brief: After this command is transmitted, the chip would enter the deep-sleep mode to save power. 
+ *         The deep sleep mode would return to standby by hardware reset. The only one parameter is a 
+ *         check code, the command would be executed if check code = 0xA5. 
+ *         You can use Epd::Reset() to awaken and use Epd::Init() to initialize.
+ */
+void Epd::sleep()
+{
+    sendCommand(VCOM_AND_DATA_INTERVAL_SETTING);
+    sendData(0xF7);     // border floating
+    sendCommand(POWER_OFF);
+    waitUntilIdle();
+    sendCommand(DEEP_SLEEP);
+    sendData(0x15);
+}
+
+void Epd::displayFrame()
+{
+    sendCommand(DISPLAY_REFRESH);
+    Thread::wait(100);
+    waitUntilIdle();
+}
+
+void Epd::demo()
+{
+    sendCommand(DATA_START_TRANSMISSION_1);
+    Thread::wait(2);
+    for(int i = 0; i < this->width / 8 * this->height; i++) {
+        sendData(rand() % 255);
+    }
+    Thread::wait(2);
+
+    displayFrame();
 }
