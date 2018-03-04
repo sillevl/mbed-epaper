@@ -1,6 +1,14 @@
 #include "epd.h"
 #include "demo.c"
 
+#include "images/eo-ict-vives-black.c"
+#include "images/eo-ict-vives-red.c"
+#include "images/hackerspace-black.c"
+#include "images/hackerspace-red.c"
+#include "images/lesrooster-black.c"
+#include "images/lesrooster-red.c"
+#include "images/vives-large.c"
+
 Epd::Epd(SPI* spi, PinName cs_pin, PinName reset_pin, PinName dc_pin, PinName busy_pin):
   cs(cs_pin), display_reset(reset_pin), dc(dc_pin), busy(busy_pin)
 {
@@ -100,14 +108,14 @@ void Epd::demo()
     sendCommand(DATA_START_TRANSMISSION_1);
     Thread::wait(2);
     for(int i = 0; i < this->width / 8 * this->height; i++) {
-        sendData(gImage_demo[i]);
+        sendData(gImage_lesrooster_black[i]);
     }
     Thread::wait(2);
 
     sendCommand(DATA_START_TRANSMISSION_2);
     Thread::wait(2);
     for(int i = 0; i < this->width / 8 * this->height; i++) {
-        sendData(gImage_demo[i]);
+        sendData(gImage_lesrooster_red[i]);
     }
     Thread::wait(2);
 
